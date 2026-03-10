@@ -2,6 +2,7 @@ import express from 'express';
 const app = express();
 const PORT = 8000;
 import path from 'path';
+import fs from 'fs'; 
 
 const __dirname = path.resolve();
 console.log(__dirname + "========");
@@ -9,7 +10,7 @@ console.log(__dirname + "========");
 //server static files from the public directories
 
 app.use(express.static(__dirname + "/public"));
-
+app.use(express.urlencoded({ extended: true})); //middleware
 
 //to join multiple paths
 
@@ -54,6 +55,25 @@ app.get("/register", (req, res) => {
     console.log(req.query);
     console.log("request received login");
     res.sendFile(__dirname +"/src/html/register.html");
+})
+
+const fileName = "userList.csv";
+app.post("/register", (req, res) => {  //server 
+    const {name, email, password} = req.body;
+
+    const str = `${name},${email},${password}\n`;
+
+    // console.log(str.split(","));
+
+    //store the data and create the file and write the data in it
+
+
+    fs.appendFile(fileName, str, (error)=>{
+        error ? res.send(error.message) : res.redirect("/");
+        // res.send(`<h1 class='alert alert-success'>User has been created, you may login now</h1>`); 
+    });
+    
+    // res.sendFile(__dirname +"/src/html/register.html");
 })
 
 //User Login controller
