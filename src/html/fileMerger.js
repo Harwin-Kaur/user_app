@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+export const makeHTMLString = (userArg) => {
+    console.log(userArg);
+
+    const str = userArg.reduce((acc, user) => user.length ? acc + `<li>${user.split(",")[0]} : ${user.split(",")[1]}</li>` :  acc, "");
+
+    // const str = userArg.reduce((acc, user) =>  `<li> ${user}</li>`);
+    // console.log(str);
+    return `
+    
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,29 +51,13 @@
         </nav>
     </div>
     
-    <h1 class="text-center">Welcome Back, Login to go to your dashboard!</h1>
-    <hr />
-
+<div class="container">
+    <h1>Welcome to our Community</h1>
+    <hr /><ul>`
+    + str +
+`</ul></div>
     
-</div>
-    <div class="container mt-5">
-        <form class="shadow-lg p-4 rounded" method="post" action="/login" enctype="application/x-www-form-urlencoded">
-            <h2>Login Now!</h2>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  
-  <div class="d-grid">
-<button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-  
-</form>
-    </div>
 </body>
 </html>
+    `; 
+}

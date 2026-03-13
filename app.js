@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8000;
 import path from 'path';
 import fs from 'fs'; 
+import { makeHTMLString } from './src/html/fileMerger.js';
 
 const __dirname = path.resolve();
 console.log(__dirname + "========");
@@ -25,9 +26,26 @@ app.use(express.urlencoded({ extended: true})); //middleware
 
   //Home page controller
 
+
+//home page controller
+
 app.get("/", (req, res) => {
-    console.log("request received");
-    res.sendFile(__dirname +"/src/html/index.html");
+
+    //read the text file
+
+    fs.readFile(fileName, "utf-8" ,(error, data)=>{
+        
+        if(error){
+            console.log(error);
+            res.sendFile(__dirname +"/src/html/index.html");
+        }
+        else{
+            
+            res.send(makeHTMLString(data.split("\n")));
+        }
+    });
+
+    // res.sendFile(__dirname +"/src/html/index.html");
 })
 
 
@@ -81,7 +99,29 @@ app.post("/register", (req, res) => {  //server
 app.get("/login", (req, res) => {
     console.log("request received");
     res.sendFile(__dirname +"/src/html/login.html");
-})
+});
+
+app.post("/login", (req, res) => {
+    const {email, password} = req.body;
+    const str = email + "," + password;
+
+    //read data from the file
+
+    fs.readFile(fileName, "utf-8", (error, data)=>{
+        if(error){
+            console.log(error);
+            res.send("working");
+        }
+        else
+            {
+            const person = data.split("\n").find(user => user.includes(str));
+            person?.length ? 
+            res.send(`<h1>Hey ${person.split(",")[0]}, You have successfully logged in</h1>`)
+            :
+            res.send(`<h1>Error,    Invalid Login details</h1>`)
+        }
+    });
+});
 
 app.listen(PORT, (error) => {
     error ? console.log(error) : console.log(`Server is running at http://localhost:${PORT}`);
