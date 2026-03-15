@@ -114,9 +114,9 @@ app.post("/login", (req, res) => {
         }
         else
             {
-            const person = data.split("\n").find(user => user.includes(str));
-            person?.length ? 
-            res.send(`<h1>Hey ${person.split(",")[0]}, You have successfully logged in</h1>`)
+            const Person = data.split("\n").find(user => user.includes(str));
+            Person?.length ? 
+            res.send(`<h1>Hey ${Person.split(",")[0]}, You have successfully logged in</h1>`)
             :
             res.send(`<h1>Error,    Invalid Login details</h1>`)
         }
